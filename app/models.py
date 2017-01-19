@@ -21,6 +21,7 @@ class Month(models.Model):
 		date = models.DateTimeField(default=timezone.now)
 		no_of_holidays = models.CharField(max_length=10)
 		total_advance_overhead = models.CharField(max_length=15)
+		no_of_hours_absent = models.CharField(max_length=10)
 
 		def get_month(self):
 			month = self.date.month
