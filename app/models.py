@@ -14,16 +14,16 @@ class Employee(models.Model):
 		self.save()
 
 	def __str__(self):
-		return self.first_name
+		return "%s %s" % (self.first_name, self.last_name)
 
 class Month(models.Model):
+		Employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
 		date = models.DateTimeField(default=timezone.now)
 		no_of_holidays = models.CharField(max_length=10)
 		total_advance_overhead = models.CharField(max_length=15)
-		Employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
 
 		def get_month(self):
 			month = self.date.month
 		
 		def __str__(self):
-			return str(self.date.month)
+			return "%s - %s" % (str(self.date.month),str(self.date.year))

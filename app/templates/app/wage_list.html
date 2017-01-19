@@ -1,4 +1,43 @@
 <html>
-    <p>Hi there!</p>
-    <p>It works!{{Employee.first_name}}</p>
+    <head>
+        <title>Payroll</title>
+    </head>
+    <body>
+        <div>
+            <h1><a href="">Payroll by Piyush</a></h1>
+            <p>{{Employee}}</p>
+        </div>
+
+        <div>
+            <div>
+    <p>Note : Esi is 1.75% on payable salary</p>
+</div>
+
+{% for employee in employees %}
+    <div>
+        <p>Name: {{ employee }} <!-- {{ salary }} --></p>
+
+    </div>
+{% endfor %}
+
+{% for sal in salary %}
+    <div>
+        <p>salary:{{ sal }}</p>
+    </div>
+{% endfor %}
+
+{% for salary in salary_payable %}
+    <div>
+        <p>salary - payable:{{ salary }}</p>
+    </div>
+{% endfor %}
+
+{% for net in net_payable %}
+    <div>
+        <p>net-salary - payable:{{ net }}</p>
+    </div>
+{% endfor %}
+
+        </div>
+    </body>
 </html>
