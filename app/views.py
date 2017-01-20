@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse
 from .models import Employee
-from .models import Month
+from .models import Record
 import datetime
 import calendar
 
@@ -9,11 +9,13 @@ def wage_list(request):
 
 def get_data(request):
 	employees = Employee.objects.all()
+	e = Employee.objects.all()
 
 	# To find no of working days
 	full_date = datetime.datetime.now()
 	no_of_sundays = sum( [ 1 for i in calendar.monthcalendar( full_date.year, full_date.month ) if i[6]!=0 ] ) 
 	no_of_saturdays = sum( [ 1 for i in calendar.monthcalendar( full_date.year, full_date.month ) if i[5]!=0 ] ) 
+
 	tupl = calendar.monthrange(full_date.year,full_date.month)
 	total_days_in_month = int(tupl[1])
 	total_working_days = int(total_days_in_month - ( no_of_sundays + no_of_saturdays))
@@ -24,19 +26,45 @@ def get_data(request):
 	salary_payable=[]
 	salary=[]
 	net_payable = []
+	no_of_holiday = []
+	salary_deducted = []
+	net_final_payable = []
+	total_ot_hrs = []
+	Ot_Salary = []
+	salary_per_day=[]
+	days_attended = []
+	esi_cutting = []
 	esi = 1.75
 	i=0
 
 	while i<no_of_employees:
 		salary.append( int(employees[i].pay_per_month) ) # Salary per month
-		salary_payable.append( (int(employees[i].pay_per_month)/total_days_in_month) * total_working_days ) 
+		salary_per_day.append((int(employees[i].pay_per_month)/total_working_days))
+
+		
+
+		m=e[i].record_set.all()
+		no_of_holiday.append(str(int(m[0].no_of_holidays) + float(float(m[0].no_of_hours_absent)/8)))
+		days_attended.append(float(total_working_days) - float(no_of_holiday[i]))
+
+		salary_payable.append( salary_per_day[i] *  days_attended[i])
+		esi_cutting.append(salary_payable[i]*0.0175)
 		net_salary = salary_payable[i] - salary_payable[i]*0.0175
 		net_payable.append(net_salary)
+
+		salary_deducted.append((int(m[0].no_of_holidays) + int(int(m[0].no_of_hours_absent)/8))*salary_per_day[i])
+		total_ot_hrs.append(int(m[0].no_of_ot_hours))
+		Ot_Salary.append((int(m[0].no_of_ot_hours)/8)*salary_per_day[i])
+		net_final_payable.append(Ot_Salary[i] + net_payable[i] -salary_deducted[i] )
+		# print(no_of_holiday)
+
 		i+=1
 	# End to find net payable slary 
 
 
 
-
 	return render(request,'app/wage_list.html',{'employees':employees,'twd':total_working_days,'no_of_employees':no_of_employees,'salary':salary,
-		'salary_payable':salary_payable,'net_payable':net_payable})
+		'salary_payable':salary_payable,'net_payable':net_payable,'no_of_holiday':no_of_holiday,'salary_deducted':salary_deducted,
+		'total_ot_hrs':total_ot_hrs,'Ot_Salary':Ot_Salary,'net_final_payable':net_final_payable,'esi':esi,
+		'esi_cutting':esi_cutting})
+#  Make ESI new variable

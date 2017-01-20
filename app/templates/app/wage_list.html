@@ -4,7 +4,7 @@
     </head>
     <body>
         <div>
-            <h1><a href="">Payroll by Piyush</a></h1>
+            <h1><a href="">Payroll</a></h1>
             <p>{{Employee}}</p>
         </div>
 
@@ -26,18 +26,58 @@
     </div>
 {% endfor %}
 
+
 {% for salary in salary_payable %}
     <div>
         <p>salary - payable:{{ salary }}</p>
     </div>
 {% endfor %}
 
-{% for net in net_payable %}
+<div>
+    <p>ESI:{{ esi }} %</p>
+</div>
+
+{% for cut in esi_cutting %}
     <div>
-        <p>net-salary - payable:{{ net }}</p>
+        <p>ESI Cutting : {{ cut }}</p>
     </div>
 {% endfor %}
 
+{% for net in net_payable %}
+    <div>
+        <p>Salary after cutting ESI : {{ net }}</p>
+    </div>
+{% endfor %}
+
+{% for i in no_of_holiday %}
+    <div>
+        <p>Net no of Holidays(including absent hrs) : {{ i }}</p>
+    </div>
+{% endfor %}
+
+{% for i in salary_deducted %}
+    <div>
+        <p>Salary Deducted : {{ i }}</p>
+    </div>
+{% endfor %}
+
+{% for i in total_ot_hrs %}
+    <div>
+        <p>Total OT hours : {{ i }}</p>
+    </div>
+{% endfor %}
+
+{% for i in Ot_Salary %}
+    <div>
+        <p>OT Salary : {{ i }}</p>
+    </div>
+{% endfor %}
+
+{% for i in net_final_payable %}
+    <div>
+        <p>Net Final Payable Salary : {{ i }}</p>
+    </div>
+{% endfor %}
         </div>
     </body>
 </html>

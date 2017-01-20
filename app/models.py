@@ -16,15 +16,22 @@ class Employee(models.Model):
 	def __str__(self):
 		return "%s %s" % (self.first_name, self.last_name)
 
-class Month(models.Model):
+class Record(models.Model):
 		Employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+		#Employees = models.ManyToManyField(Employee)
 		date = models.DateTimeField(default=timezone.now)
+		# month = models.IntegerField(default=date.month)
+		# year = models.IntegerField(default=date.year)
 		no_of_holidays = models.CharField(max_length=10)
 		total_advance_overhead = models.CharField(max_length=15)
 		no_of_hours_absent = models.CharField(max_length=10)
+		no_of_ot_hours = models.CharField(max_length=10)
+		key = models.AutoField(primary_key=True)
 
 		def get_month(self):
 			month = self.date.month
 		
 		def __str__(self):
-			return "%s - %s" % (str(self.date.month),str(self.date.year))
+			e = self.Employee
+			return "%s %s %s - %s" % ( e.first_name,e.last_name,str(self.date.month),str(self.date.year))
+			#return (str(Month.Employee))
