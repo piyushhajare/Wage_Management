@@ -19,9 +19,9 @@ class Employee(models.Model):
 class Record(models.Model):
 		Employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
 		#Employees = models.ManyToManyField(Employee)
-		date = models.DateTimeField(default=timezone.now)
-		# month = models.IntegerField(default=date.month)
-		# year = models.IntegerField(default=date.year)
+		date = models.DateField(default=timezone.now)
+		#month = models.IntegerField(blank=True,null=True)
+		#year = models.IntegerField(blank=True,null=True)
 		no_of_holidays = models.CharField(max_length=10)
 		total_advance_overhead = models.CharField(max_length=15)
 		no_of_hours_absent = models.CharField(max_length=10)
