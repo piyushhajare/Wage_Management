@@ -1,117 +1,225 @@
 <html>
-    <head>
-        <title>Payroll</title>
+<head>
+    <title>Payroll</title>
 
-        {% load static %}
+    {% load static %}
 
 </head>
-<script type="text/javascript" type="text/javascript" href="{{ STATIC_URL }}/bootstrap.min.js"></script>
 
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <script>
+<style type="text/css">
+    td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+#datepicker{
+    display: block;
+    margin: auto;
+}
+
+.rowt
+{
+  /*border:5px solid #42a5f5;  */
+    border:5px solid #2BBBAD;
+    margin-top:10px;
+    
+}
+
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+          
+
+<script type="text/javascript" type="text/javascript" href="{{ STATIC_URL }}/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
   $( function() {
     $( "#datepicker" ).datepicker({changeMonth: true, changeYear: true,monthNames: ["1","2","3","4","5","6","7","8","9","10","11","12"],
 
-     showButtonPanel: true, dateFormat: 'MM yy', justMonth: true});
-  } );
-  </script>
-  </head>
-    <body>
+       showButtonPanel: true, dateFormat: 'MM yy', justMonth: true,});
+} );
 
-<form name="datepicker" action="{% url 'get_data' %}" method="post" >{% csrf_token %}
-Date: <input type="text" id="datepicker" name="datepicker" >
-<input type="submit" name="dp"  value="Submit">
-</form>
+
+
+  var old_goToToday = $.datepicker._gotoToday
+  $.datepicker._gotoToday = function(id) {
+      old_goToToday.call(this,id)
+      this._selectDate(id)
+  }
+</script>
+</head>
+<body>
+
     
- 
-
-    </div>
-</div>
-        <div>
-            <h1><a href="">Payroll</a></h1>
-            <p>{{Employee}}</p>
-        </div>
-
-        <div>
-            <div>
-    <p>Note : Esi is 1.75% on payable salary</p>
-</div>
-
-{% for employee in employees %}
-    <div>
-        <p>Name: {{ employee }} <!-- {{ salary }} --></p>
-
-    </div>
-{% endfor %}
-
-{% for sal in salary %}
-    <div>
-        <p>salary:{{ sal }}</p>
-    </div>
-{% endfor %}
-
-
-{% for salary in salary_payable %}
-    <div>
-        <p>salary - payable:{{ salary }}</p>
-    </div>
-{% endfor %}
-
 <div>
-    <p>ESI:{{ esi }} %</p>
+    <h1><a href="">Payroll</a></h1>
 </div>
 
-{% for cut in esi_cutting %}
-    <div>
-        <p>ESI Cutting : {{ cut }}</p>
-    </div>
-{% endfor %}
 
-{% for net in net_payable %}
-    <div>
-        <p>Salary after cutting ESI : {{ net }}</p>
-    </div>
-{% endfor %}
+<!-- ================================================================================== -->
 
-{% for i in no_of_holiday %}
-    <div>
-        <p>Net no of Holidays(including absent hrs) : {{ i }}</p>
-    </div>
-{% endfor %}
 
-{% for i in salary_deducted %}
-    <div>
-        <p>Salary Deducted : {{ i }}</p>
+   <div class="row">
+    <div class="card horizontal" style="margin-left: 20%;margin-right: 20%">
+      <div class="card-stacked">
+        <div class="card-content">
+          <div class="row">
+                <form  class="col s12" name="datepicker" action="{% url 'get_data' %}" method="post" >{% csrf_token %}
+                <div class="col s6">
+                    Date: <input type="text" id="datepicker" name="datepicker">
+                    <div class="card-action" >
+                        <input type="submit" class="btn waves-effect waves-light" name="dp"  value="Submit">
+                    </div>
+                    <p>Note : Esi is 1.75% on payable salary</p>
+                </div>
+                </form>  
+</div>
+      </div>
     </div>
-{% endfor %}
+  </div>
 
-{% for i in total_ot_hrs %}
-    <div>
-        <p>Total OT hours : {{ i }}</p>
+  <!-- <div class="row">
+    <div class="card horizontal" style="margin-left: 20%;margin-right: 20%">
+      <div class="card-stacked">
+        <div class="card-content">
+          <p>I am a very simple card. I am good at containing small bits of information.</p>
+        </div>
+        <div class="card-action" >
+        <input type="submit" class="btn waves-effect waves-light" name="dp" value="Submit" style="margin-left: 37%;" >
+        </div>
+      </div>
     </div>
-{% endfor %}
+  </div> -->
 
-{% for i in Ot_Salary %}
-    <div>
-        <p>OT Salary : {{ i }}</p>
-    </div>
-{% endfor %}
 
-{% for i in net_final_payable %}
-    <div>
-        <p>Net Final Payable Salary : {{ i }}</p>
-    </div>
-{% endfor %}
+<!-- ================================================================================== -->
 
-{% for i in filtered_record %}
+<div class=" card row rowt" style="margin-left: 10%;margin-right: 10%;padding:2%">
+
+<table class="striped responsive-table col s12"  >
+    <thead>
+    <tr>
+    <th>
+    Name
+    </th>
+    {% for employee in employees %}
+    <th>
+       <p>{{ employee }}</p>
+    </th>
+    {% endfor %}
+    <tr>
+    </thead>
+
+    <tr>
+    <th>
+    Salary     
+    </th>
+    {% for sal in salary %}
+    <td>
+        <p>{{ sal }}</p>
+    </td>
+    {% endfor %}
+    </tr>
+
+    <tr>
+    <th>
+    Salary Payable
+    </th>
+    {% for salary in salary_payable %}
+    <td>
+        <p>{{ salary }}</p>
+    </td>
+    {% endfor %}
+    </tr>
+
+    <tr>
+    <th>
+    ESI Cutting
+    </th>
+    {% for cut in esi_cutting %}
+    <td>
+        <p>{{ cut }}</p>
+    </td>
+    {% endfor %}
+    </tr>
+
+    <tr>
+    <th>
+    Salary after cutting ESI
+    </th>
+    {% for net in net_payable %}
+    <td>
+        <p>{{ net }}</p>
+    </td>
+    {% endfor %}
+    </tr>
+
+    <tr>
+    <th>
+    Net no of holidays(including absent hrs)
+    </th>
+    {% for i in no_of_holiday %}
+    <td>
+        <p>{{ i }}</p>
+    </td>
+    {% endfor %}
+    </tr>
+
+    <tr>
+    <th>
+    Salary Deducted
+    </th>
+    {% for i in salary_deducted %}
+    <td>
+        <p>{{ i }}</p>
+    </td>
+    {% endfor %}
+    </tr>
+
+    <tr>
+    <th>
+    Total OT hours
+    </th>
+    {% for i in total_ot_hrs %}
+    <td>
+        <p>{{ i }}</p>
+    </td>
+    {% endfor %}
+    </tr>
+
+    <tr>
+    <th>
+    OT Salary
+    </th>
+    {% for i in Ot_Salary %}
+    <td>
+        <p>{{ i }}</p>
+    </td>
+    {% endfor %}
+    </tr>
+
+    <tr>
+    <th>
+    Net Final Payable Salary
+    </th>
+    {% for i in net_final_payable %}
+    <td>
+        <p>{{ i }}</p>
+    </td>
+    {% endfor %}
+    </tr>
+
+   <!--  {% for i in filtered_record %}
     <div>
         <p>New Filter : {{ i.Employee }}</p>
     </div>
-{% endfor %}
-
-        </div>
-    </body>
+    {% endfor %} -->
+</table>
+</div>
+</body>
 </html>

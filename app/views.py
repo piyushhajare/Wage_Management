@@ -45,23 +45,23 @@ def get_data(request):
 
 	while i<no_of_employees:
 		salary.append( int(filtered_record[i].Employee.pay_per_month) ) # Salary per month
-		salary_per_day.append((int(filtered_record[i].Employee.pay_per_month)/total_working_days))
+		salary_per_day.append(( round(int(filtered_record[i].Employee.pay_per_month)/total_working_days,2) ))
 
 		
 
 		m=filtered_record[i].Employee.record_set.all()
-		no_of_holiday.append(str(int(m[0].no_of_holidays) + float(float(m[0].no_of_hours_absent)/8)))
+		no_of_holiday.append(str(int(m[0].no_of_holidays) + float(float(m[0].no_of_hours_absent)/8) ))
 		days_attended.append(float(total_working_days) - float(no_of_holiday[i]))
 
-		salary_payable.append( salary_per_day[i] *  days_attended[i])
-		esi_cutting.append(salary_payable[i]*0.0175)
-		net_salary = salary_payable[i] - salary_payable[i]*0.0175
+		salary_payable.append( round(salary_per_day[i] *  days_attended[i],2))
+		esi_cutting.append( round(salary_payable[i]*0.0175,2) )
+		net_salary = round(salary_payable[i] - salary_payable[i]*0.0175,2)
 		net_payable.append(net_salary)
 
-		salary_deducted.append((int(m[0].no_of_holidays) + int(int(m[0].no_of_hours_absent)/8))*salary_per_day[i])
+		salary_deducted.append( round((int(m[0].no_of_holidays) + int(int(m[0].no_of_hours_absent)/8))*salary_per_day[i],2 ))
 		total_ot_hrs.append(int(m[0].no_of_ot_hours))
-		Ot_Salary.append((int(m[0].no_of_ot_hours)/8)*salary_per_day[i])
-		net_final_payable.append(Ot_Salary[i] + net_payable[i] -salary_deducted[i] )
+		Ot_Salary.append( round((int(m[0].no_of_ot_hours)/8)*salary_per_day[i],2) )
+		net_final_payable.append( round(Ot_Salary[i] + net_payable[i] -salary_deducted[i],2) )
 
 		# print(no_of_holiday)
 
