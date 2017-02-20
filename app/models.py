@@ -27,6 +27,7 @@ class Record(models.Model):
 		no_of_hours_absent = models.CharField(max_length=10)
 		no_of_ot_hours = models.CharField(max_length=10)
 		key = models.AutoField(primary_key=True)
+		pending = models.CharField(max_length=15)
 
 		def get_month(self):
 			month = self.date.month

@@ -14,6 +14,12 @@ def get_data(request):
 	print(date_from_user)
 
 	filtered_record = Record.objects.filter(date__year=date_from_user[1],date__month=date_from_user[0])
+
+	employees_list = list(filtered_record)
+	print(type(employees_list))
+	temp=[]
+
+
 	employees = Employee.objects.all()
 	e = Employee.objects.all()
 
@@ -28,7 +34,7 @@ def get_data(request):
 	# End to find no of working days
 
 	# To find net payable slary
-	no_of_employees = filtered_record.count() 
+	no_of_employees = filtered_record.count()
 	salary_payable=[]
 	salary=[]
 	net_payable = []
@@ -42,12 +48,21 @@ def get_data(request):
 	esi_cutting = []
 	esi = 1.75
 	i=0
+	int_array=[]
+	name_of_employee=[]
+
+	for counter in range(no_of_employees):
+		int_array.append(int(counter))
+
+	emp_data = []
 
 	while i<no_of_employees:
+
 		salary.append( int(filtered_record[i].Employee.pay_per_month) ) # Salary per month
 		salary_per_day.append(( round(int(filtered_record[i].Employee.pay_per_month)/total_working_days,2) ))
 
-		
+		# name_of_employee.append(filtered_record[i].Employee.first_name)
+		temp.append(employees_list[i].Employee)
 
 		m=filtered_record[i].Employee.record_set.all()
 		no_of_holiday.append(str(int(m[0].no_of_holidays) + float(float(m[0].no_of_hours_absent)/8) ))
@@ -58,23 +73,40 @@ def get_data(request):
 		net_salary = round(salary_payable[i] - salary_payable[i]*0.0175,2)
 		net_payable.append(net_salary)
 
-		salary_deducted.append( round((int(m[0].no_of_holidays) + int(int(m[0].no_of_hours_absent)/8))*salary_per_day[i],2 ))
+		# salary_deducted.append( round((int(m[0].no_of_holidays) + int(int(m[0].no_of_hours_absent)/8))*salary_per_day[i],2 ))
+		salary_deducted.append( round((int(int(m[0].no_of_hours_absent)/8))*salary_per_day[i],2 ))
 		total_ot_hrs.append(int(m[0].no_of_ot_hours))
 		Ot_Salary.append( round((int(m[0].no_of_ot_hours)/8)*salary_per_day[i],2) )
 		net_final_payable.append( round(Ot_Salary[i] + net_payable[i] -salary_deducted[i],2) )
 
+		emp_data.append({
+				'name_of_employee':temp[-1],
+				'salary':salary[-1],
+				'salary_payable' : salary_payable[-1],
+				'no_of_holiday' : no_of_holiday[-1],
+				'esi_cutting' : esi_cutting[-1],
+				'net_payable' : net_payable[-1],
+				'salary_deducted' : salary_deducted[-1],
+				'total_ot_hrs' : total_ot_hrs[-1],
+				'Ot_Salary' : Ot_Salary[-1],
+				'net_final_payable' : net_final_payable[-1],
+			})
+
+
+		
 		# print(no_of_holiday)
 
 		i+=1
-	# End to find net payable slary 
+		# End to find net payable slary 
 
 
 
-	return render(request,'app/wage_list.html',{'employees':filtered_record,'twd':total_working_days,'no_of_employees':no_of_employees,'salary':salary,
+
+	return render(request,'app/wage_list.html',{'employees': employees_list,'twd':total_working_days,'no_of_employees':no_of_employees,'salary':salary,
 		'salary_payable':salary_payable,'net_payable':net_payable,'no_of_holiday':no_of_holiday,'salary_deducted':salary_deducted,
 		'total_ot_hrs':total_ot_hrs,'Ot_Salary':Ot_Salary,'net_final_payable':net_final_payable,'esi':esi,
-		'esi_cutting':esi_cutting,'filtered_record':filtered_record})
+		'esi_cutting':esi_cutting,'filtered_record':filtered_record,'int_array':int_array,'emp_data':emp_data})
 #  Make ESI new variable
 
 def index_data(request):
-	return render(request,'app/wage_list.html',{})	
+	return render(request,'app/wage_list.html',{})
