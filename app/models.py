@@ -28,6 +28,7 @@ class Record(models.Model):
 		no_of_ot_hours = models.CharField(max_length=10)
 		key = models.AutoField(primary_key=True)
 		pending = models.CharField(max_length=15)
+		this_month_salary = models.CharField(max_length=15)
 
 		def get_month(self):
 			month = self.date.month
